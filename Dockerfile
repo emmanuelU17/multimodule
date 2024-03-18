@@ -8,7 +8,7 @@ WORKDIR /build
 COPY . /build
 
 # generate jar file for webserver directory
-RUN mvn clean install -DskipTests
+RUN mvn clean --no-transfer-progress install -DskipTests
 
 # Stage 2: run stage
 FROM maven:3.9.6-amazoncorretto-21-al2023

@@ -23,7 +23,7 @@ class IntegrationTest {
     @Container
     static final GenericContainer<?> container = new GenericContainer<>(
             new ImageFromDockerfile("native-image", false)
-            .withDockerfile(Paths.get("../webserver/Dockerfile")))
+            .withDockerfile(Paths.get("../Dockerfile")))
             .withExposedPorts(8080);
 
     @BeforeEach
