@@ -20,7 +20,7 @@ public class NativeImageTest {
     static final GenericContainer<?> container = new GenericContainer<>(
             new ImageFromDockerfile("native-image", false)
                     .withDockerfile(Paths.get("../Dockerfile.native")))
-            .withImagePullPolicy(PullPolicy.defaultPolicy())
+//            .withImagePullPolicy(PullPolicy.defaultPolicy())
             .withExposedPorts(8080);
 
 //    @Container

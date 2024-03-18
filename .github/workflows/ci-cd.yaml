@@ -29,11 +29,12 @@ jobs:
           username: emmanuelu17
           password: ${{ secrets.MULTI_MODULE }}
 
-      - name: Build normal docker image
-        run: docker build --tag normal-image:latest . --progress=plain
+#      - name: Build normal docker image
+#        run: docker build --tag normal-image:latest . --progress=plain
 
       - name: Run tests
         run: |
+          mvn clean install
           cd integration/
           mvn clean test -Dtest="IntegrationTest"
 
@@ -58,10 +59,11 @@ jobs:
           username: emmanuelu17
           password: ${{ secrets.MULTI_MODULE }}
 
-      - name: Build native docker image
-        run: docker build --tag native-image:latest -f Dockerfile.native . --progress=plain
+#      - name: Build native docker image
+#        run: docker build --tag native-image:latest -f Dockerfile.native . --progress=plain
 
       - name: Run tests
         run: |
+          mvn clean install
           cd integration/
-          mvn clean test -Dtest="NativeImageTest"
+          mvn test -Dtest="NativeImageTest"
