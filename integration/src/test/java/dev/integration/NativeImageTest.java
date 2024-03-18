@@ -5,21 +5,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.images.builder.ImageFromDockerfile;
+import org.testcontainers.images.PullPolicy;
 import org.testcontainers.junit.jupiter.Container;
-
-import java.nio.file.Paths;
 
 public class NativeImageTest {
 
     private static WebTestClient testClient;
 
     // https://java.testcontainers.org/features/creating_images/
+//    @Container
+//    static final GenericContainer<?> container = new GenericContainer<>(
+//            new ImageFromDockerfile("native-image", false)
+//                    .withDockerfile(Paths.get("../Dockerfile.native")))
+//            .withExposedPorts(8080);
+
     @Container
-    static final GenericContainer<?> container = new GenericContainer<>(
-            new ImageFromDockerfile("native-image", false)
-                    .withDockerfile(Paths.get("../Dockerfile.native")))
-            .withExposedPorts(8080);
+    static final GenericContainer<?> container = new GenericContainer<>("native-image:latest")
+            .withImagePullPolicy(PullPolicy.defaultPolicy())
+            .withExposedPorts(8081);
 
     @BeforeAll
     static void setUp() {
