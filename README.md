@@ -28,3 +28,7 @@ validation process for GraalVM native images before deployment to production.
 1. For more above Maven module [Maven docs](https://maven.apache.org/guides/mini/guide-multiple-modules.html)
 2. Packaging Springboot application as dependencies in another module
 [Spring docs](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#packaging.repackage-goal.parameter-details.skip)
+
+## Dependencies
+1. Spring 3.2.x
+2. Testcontainer

@@ -22,7 +22,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>dev.webserver</groupId>
             <artifactId>webserver</artifactId>
