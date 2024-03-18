@@ -15,8 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class IntegrationTest {
 
-    private final String path = "/api/v1";
-
     private WebTestClient testClient;
 
     // https://java.testcontainers.org/features/creating_images/
@@ -37,22 +35,24 @@ class IntegrationTest {
 
     @Test
     public void healthy() {
-        testClient.get().uri(path + "/actuator/health")
+        testClient.get().uri("/actuator/health")
                 .exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectStatus()
+                .is2xxSuccessful()
                 .expectBody()
-                .jsonPath("$.status").isEqualTo("UP");
+                .jsonPath("$.status")
+                .isEqualTo("UP");
     }
 
     @Test
     public void payload() {
-        testClient.get().uri(path)
+        testClient.get().uri("/api/v1")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.name").isEqualTo("Hello World!");
+                .jsonPath("$.name")
+                .isEqualTo("Hello world!");
     }
 
     @Test

@@ -22,12 +22,20 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>dev.webserver</groupId>
             <artifactId>webserver</artifactId>
             <version>${webserver.version}</version>
             <!-- scope provided as we need the jar file of webserver to generate a native image. -->
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
