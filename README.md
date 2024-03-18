@@ -1,34 +1,47 @@
-# Run Endpoint Tests Against a Natively Compiled SpringBoot Application
+# Test Against a Natively Compiled SpringBoot Application
 
 ## Introduction
-This repository provides a solution for conducting RESTful endpoint tests on
-a SpringBoot application complied to a native GraalVM image, leveraging
-Testcontainers. Ensuring the accuracy and reliability of native images before
-deployment to production.
+Have you ever wondered how do you validate a natively complied java application has no
+reflection error or bugs? Well this repository provides a solution for conducting tests
+against a natively compiled RESTFul SpringBoot application. It uses Maven multimodule
+build where the webserver module is our production application and integration module
+contains tests that run against non-natively and natively compiled production application.
 
 ## Problem Statement and Solution
 1. Problem Statement:
-   1. The project owner intends to transition from deploying their application
-   as a normal Docker image to a GraalVM native image.
-   2. Despite adhering to Test-Driven Development (TDD) practices in the development
-   of this application, validating compatibility with native images requires
-   addressing potential reflection issues and other complexities.
-   3. Current validation methods rely on manual testing via click-ops, involving UI
-   interactions to verify server responses.
+   1. The project owner intends to transition from deploying webserver module
+   as a normal Docker image to a GraalVM native Docker image.
+   2. Although webserver module adheres to Test-Driven Development (TDD) principles,
+   we need to validate webserver module successfully complied to a native image without
+   reflection errors, framework of 3rd-party dependencies not being able to be converted
+   into a native image.
+   3. Current validation against natively compiled image is relying on manual testing via
+   click-ops (UI interactions to verify server responses).
 2. Proposed Solution
-   1. Utilizing a Maven multimodule setup, the integration directory will play a
-   pivotal role in compiling webserver directory to a native image prior to deploying.
-   2. Using Testcontainers, integration directory compiles webserver directory using the
-   Dockerfile in the root of webserver.
+   1. Utilizing a Maven multimodule setup where integration module contains all tests
+   against natively compiled webserver module (production code).
+   2. Dockerfiles to compile webserver module into a none-native and native image.
+   3. Testcontainers to run tests against Dockerfile builds.
+   4. Automation testing leveraging GitHub actions.
 
-By automation of testing procedures, the project aims to streamline the
-validation process for GraalVM native images before deployment to production.
+## Pre-requisite
+1. Docker installed
 
-## Documentation
-1. For more above Maven module [Maven docs](https://maven.apache.org/guides/mini/guide-multiple-modules.html)
-2. Packaging Springboot application as dependencies in another module
-[Spring docs](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#packaging.repackage-goal.parameter-details.skip)
+## Getting Started
+1. git clone `https://github.com/emmanuelU17/multimodule.git`
+2. In your terminal, `mvn clean install -DskipTests`
+3. To run tests against a normal image, in your terminal `cd integration/ \
+   && mvn clean test -Dtest="IntegrationTest"`
+4. To run tests against a native image, in your terminal
+   `cd integration/ \ && mvn clean test -Dtest="NativeImageTest"`
 
 ## Dependencies
 1. Spring 3.2.x
-2. Testcontainer
+2. Testcontainers
+3. Webflux for testing in integration module
+
+## Helpful Documentation
+1. For more above Maven module [Maven docs](https://maven.apache.org/guides/mini/guide-multiple-modules.html)
+2. Packaging Springboot application as dependencies in another module
+[Spring docs](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#packaging.repackage-goal.parameter-details.skip)
+3. [Creating images on the fly](https://java.testcontainers.org/features/creating_images/)

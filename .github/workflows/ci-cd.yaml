@@ -23,20 +23,10 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
-      - name: Log into DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: emmanuelu17
-          password: ${{ secrets.MULTI_MODULE }}
-
-#      - name: Build normal docker image
-#        run: docker build --tag normal-image:latest . --progress=plain
-
-      - name: Run tests
-        run: |
-          mvn clean install -DskipTests
-          cd integration/
-          mvn clean test -Dtest="IntegrationTest"
+      - name: Run tests against normal image
+        run: mvn clean install -DskipTests \
+          && cd integration/ \
+          && mvn clean test -Dtest="IntegrationTest"
 
   build-native-image:
     name: Run endpoint tests against native executable image
@@ -53,17 +43,7 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
-      - name: Log into DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: emmanuelu17
-          password: ${{ secrets.MULTI_MODULE }}
-
-#      - name: Build native docker image
-#        run: docker build --tag native-image:latest -f Dockerfile.native . --progress=plain
-
-      - name: Run tests
-        run: |
-          mvn clean install -DskipTests
-          cd integration/
-          mvn test -Dtest="NativeImageTest"
+      - name: Run tests against native image
+        run: mvn clean install -DskipTests \
+          && cd integration/ \
+          && mvn test -Dtest="NativeImageTest"

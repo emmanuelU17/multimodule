@@ -5,28 +5,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.images.PullPolicy;
 import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.junit.jupiter.Container;
 
 import java.nio.file.Paths;
 
-public class NativeImageTest {
+class NativeImageTest {
 
     private static WebTestClient testClient;
 
-    // https://java.testcontainers.org/features/creating_images/
     @Container
-    static final GenericContainer<?> container = new GenericContainer<>(
+    private static final GenericContainer<?> container = new GenericContainer<>(
             new ImageFromDockerfile("native-image", false)
                     .withDockerfile(Paths.get("../Dockerfile.native")))
-//            .withImagePullPolicy(PullPolicy.defaultPolicy())
             .withExposedPorts(8080);
-
-//    @Container
-//    static final GenericContainer<?> container = new GenericContainer<>("native-image:latest")
-//            .withImagePullPolicy(PullPolicy.defaultPolicy())
-//            .withExposedPorts(8081);
 
     @BeforeAll
     static void setUp() {
@@ -38,7 +30,7 @@ public class NativeImageTest {
     }
 
     @Test
-    public void actuatorHealthyNativeImage() {
+    void actuatorHealthyNativeImage() {
         testClient.get().uri("/actuator/health")
                 .exchange()
                 .expectStatus()
@@ -49,7 +41,7 @@ public class NativeImageTest {
     }
 
     @Test
-    public void payloadNativeImage() {
+    void payloadNativeImage() {
         testClient.get().uri("/api/v1")
                 .exchange()
                 .expectStatus().isOk()

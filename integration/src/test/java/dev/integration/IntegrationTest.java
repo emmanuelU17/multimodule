@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.images.PullPolicy;
 import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.junit.jupiter.Container;
 
@@ -18,17 +17,11 @@ class IntegrationTest {
 
     private static WebTestClient testClient;
 
-    // https://java.testcontainers.org/features/creating_images/
     @Container
-    static final GenericContainer<?> container = new GenericContainer<>(
+    private static final GenericContainer<?> container = new GenericContainer<>(
             new ImageFromDockerfile("normal-image", false)
             .withDockerfile(Paths.get("../Dockerfile")))
             .withExposedPorts(8080);
-
-//    @Container
-//    static final GenericContainer<?> container = new GenericContainer<>("normal-image:latest")
-//            .withImagePullPolicy(PullPolicy.defaultPolicy())
-//            .withExposedPorts(8080);
 
     @BeforeAll
     static void setUp() {
@@ -40,7 +33,7 @@ class IntegrationTest {
     }
 
     @Test
-    public void healthy() {
+    void healthy() {
         testClient.get().uri("/actuator/health")
                 .exchange()
                 .expectStatus()
@@ -51,7 +44,7 @@ class IntegrationTest {
     }
 
     @Test
-    public void payload() {
+    void payload() {
         testClient.get().uri("/api/v1")
                 .exchange()
                 .expectStatus().isOk()
