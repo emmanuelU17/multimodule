@@ -21,7 +21,7 @@ class IntegrationTest {
     // https://java.testcontainers.org/features/creating_images/
     @Container
     static final GenericContainer<?> container = new GenericContainer<>(
-            new ImageFromDockerfile("native-image", false)
+            new ImageFromDockerfile("image", false)
             .withDockerfile(Paths.get("../Dockerfile")))
             .withExposedPorts(8080);
 
