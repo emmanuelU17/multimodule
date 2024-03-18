@@ -14,8 +14,11 @@ FROM ghcr.io/graalvm/graalvm-community:21 AS native
 # copy jar from stage 1 into directory
 COPY --from=builder /webserver/target/webserver-exec.jar ./
 
-# as per https://docs.oracle.com/en/graalvm/jdk/17/docs/reference-manual/native-image/guides/build-native-executable-from-jar/#related-documentation
-RUN native-image /webserver-exec.jar
+# echo native-image verion (optional)
+RUN native-image --version
+
+# as per https://www.graalvm.org/latest/reference-manual/native-image/guides/build-native-executable-from-jar/
+RUN native-image -jar ./webserver-exec.jar
 
 # stage 3 use aws linux OS
 FROM public.ecr.aws/amazonlinux/amazonlinux:2023
