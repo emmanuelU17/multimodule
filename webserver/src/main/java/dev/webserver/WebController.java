@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 class WebController {
 
     @GetMapping
-    public String hello() {
-        return "Hello world!";
+    public Sample hello() {
+        return new Sample("Hello world!");
     }
 
 }
