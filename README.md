@@ -23,3 +23,8 @@ deployment to production.
 
 By automation of testing procedures, the project aims to streamline the
 validation process for GraalVM native images before deployment to production.
+
+## Documentation
+1. For more above Maven module [Maven docs](https://maven.apache.org/guides/mini/guide-multiple-modules.html)
+2. Packaging Springboot application as dependencies in another module
+[Spring docs](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#packaging.repackage-goal.parameter-details.skip)

@@ -21,13 +21,25 @@
     </properties>
 
     <build>
+        <finalName>webserver</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <classifier>exec</classifier>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <configuration>
+                            <mainClass>dev.webserver.Application</mainClass>
+                            <!-- because webserver is used as a dependency in integration module, -->
+                            <!-- I need to provide a classifier for the repackages jar. The reason -->
+                            <!-- for this is dependent module (integration) cannot load a repackaged jar's class. -->
+                            <!-- Below explains better. -->
+                            <!-- https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#packaging.repackage-goal.parameter-details.skip -->
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -36,6 +48,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 

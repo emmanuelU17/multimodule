@@ -1,0 +1,8 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+api:
+  base:
+    path: 'api/v1'
