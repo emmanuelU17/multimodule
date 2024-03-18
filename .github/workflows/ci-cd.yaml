@@ -33,7 +33,7 @@ jobs:
         run: docker build --tag normal-image:latest . --progress=plain
 
       - name: Build native docker image
-        uses: docker build --tag native-image:latest -f Dockerfile.native . --progress=plain
+        run: docker build --tag native-image:latest -f Dockerfile.native . --progress=plain
 
       - name: Run normal image tests
         run: |
