@@ -24,9 +24,10 @@ jobs:
           cache: 'maven'
 
       - name: Run tests against normal image
-        run: mvn clean install -DskipTests \
-          && cd integration/ \
-          && mvn clean test -Dtest="IntegrationTest"
+        run: |
+          mvn clean install -DskipTests
+          cd integration/
+          mvn test -Dtest="IntegrationTest"
 
   build-native-image:
     name: Run endpoint tests against native executable image
@@ -44,6 +45,7 @@ jobs:
           cache: 'maven'
 
       - name: Run tests against native image
-        run: mvn clean install -DskipTests \
-          && cd integration/ \
-          && mvn test -Dtest="NativeImageTest"
+        run: |
+          mvn clean install -DskipTests
+          cd integration/
+          mvn test -Dtest="NativeImageTest"
