@@ -1,3 +1,6 @@
 # Objective
-Simply an automation application. In other words, this integration, runs endpoint
-tests against the generated native image of webserver application.
+Directory runs automation tests against webserver directory.
+
+## Dependencies
+1. webserver module or directory.
+2. Webflux to for access to WebTestClient api.

@@ -1,2 +1,6 @@
 # Objective
-A simple Springboot web application.
+A simple RESTful Springboot web application.
+
+## Dependencies
+1. Spring web.
+2. Spring actuator.

@@ -1,29 +1,32 @@
+# stage 1: build stage
+FROM maven:3.9.6-amazoncorretto-21-al2023 as builder
+
+# copy source code into directory
+COPY . ./
+
+# generate jar file for webserver directory
+RUN mvn clean --no-transfer-progress install -DskipTests
+
+# stage 2: compile jar from stage 1 to an OS native executable
 # using latest GraalVM for java 21 as per https://github.com/graalvm/container/pkgs/container/graalvm-community
-# https://www.graalvm.org/latest/docs/getting-started/container-images/
-FROM ghcr.io/graalvm/graalvm-community:21 AS builder
+FROM ghcr.io/graalvm/graalvm-community:21 AS native
 
-# set the working directory name to build
-WORKDIR /build
+# copy jar from stage 1 into directory
+COPY --from=builder /webserver/target/webserver-exec.jar ./
 
-# copy the app source code into build directory
-COPY . /build
+# as per https://docs.oracle.com/en/graalvm/jdk/17/docs/reference-manual/native-image/guides/build-native-executable-from-jar/#related-documentation
+RUN native-image /webserver-exec.jar
 
-# executable permissions for mvnw
-RUN chmod +x mvnw
-
-# compile to native image
-RUN ./mvnw clean --no-transfer-progress -Pnative native:compile -DskipTests
-
-# stage 2 aws linux OS
+# stage 3 use aws linux OS
 FROM public.ecr.aws/amazonlinux/amazonlinux:2023
 
 # update OS
 RUN yum update -y
 
-COPY --from=builder /build/target/capstone-server ./
+COPY --from=native /webserver-exec ./
 
 # set permission
 RUN chmod +x ./
 
 # run bytecode
-CMD ["./capstone-server"]
+CMD ["./webserver-exec"]

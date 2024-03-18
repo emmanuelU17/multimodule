@@ -1,8 +1,6 @@
 package dev.integration;
 
-import dev.webserver.Sample;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -12,9 +10,7 @@ import org.testcontainers.junit.jupiter.Container;
 
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-class IntegrationTest {
+public class NativeImageTest {
 
     private static WebTestClient testClient;
 
@@ -22,7 +18,7 @@ class IntegrationTest {
     @Container
     static final GenericContainer<?> container = new GenericContainer<>(
             new ImageFromDockerfile("native-image", false)
-            .withDockerfile(Paths.get("../Dockerfile")))
+                    .withDockerfile(Paths.get("../Dockerfile.native")))
             .withExposedPorts(8080);
 
     @BeforeAll
@@ -35,7 +31,7 @@ class IntegrationTest {
     }
 
     @Test
-    public void healthy() {
+    public void actuatorHealthyNativeImage() {
         testClient.get().uri("/actuator/health")
                 .exchange()
                 .expectStatus()
@@ -46,7 +42,7 @@ class IntegrationTest {
     }
 
     @Test
-    public void payload() {
+    public void payloadNativeImage() {
         testClient.get().uri("/api/v1")
                 .exchange()
                 .expectStatus().isOk()
@@ -54,11 +50,6 @@ class IntegrationTest {
                 .expectBody()
                 .jsonPath("$.name")
                 .isEqualTo("Hello world!");
-    }
-
-    @Test
-    void sampleTestAgainstWebServerObject() {
-        assertEquals(new Sample("frank"), new Sample("frank"));
     }
 
 }
