@@ -45,6 +45,12 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
+      - name: Setup GraalVM java 21
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '21'
+          distribution: 'graalvm'
+
       - name: Native compile select modules
         run: mvn clean -Pnative,integration-test -pl webserver,fullstack -am native:compile -DskipTests
 
