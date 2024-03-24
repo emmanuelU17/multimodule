@@ -9,7 +9,7 @@ on:
 
 jobs:
   fullstack-module:
-    name: Run endpoint tests against fullstack module
+    name: Run endpoint tests against natively compiled fullstack module
     runs-on: ubuntu-latest
 
     steps:
