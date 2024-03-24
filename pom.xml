@@ -42,31 +42,6 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>integration-test</id>
-
-            <modules>
-                <module>webserver</module>
-                <module>fullstack</module>
-            </modules>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.graalvm.buildtools</groupId>
-                        <artifactId>native-maven-plugin</artifactId>
-                    </plugin>
-
-<!--                    <plugin>-->
-<!--                        <groupId>org.springframework.boot</groupId>-->
-<!--                        <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                    </plugin>-->
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <dependencyManagement>
         <dependencies>
             <dependency>

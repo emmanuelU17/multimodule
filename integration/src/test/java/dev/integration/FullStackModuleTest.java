@@ -1,5 +1,6 @@
 package dev.integration;
 
+import dev.fullstack.Car;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -12,10 +13,12 @@ import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.junit.jupiter.Container;
 
 import java.nio.file.Paths;
+import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class FullStackTest {
+class FullStackModuleTest {
 
     private static WebTestClient testClient;
 
@@ -29,7 +32,7 @@ class FullStackTest {
     @Container
     static final GenericContainer<?> server = new GenericContainer<>(
             new ImageFromDockerfile("fullstack-module", false)
-                    .withDockerfile(Paths.get("../Dockerfile.fullstack")))
+                    .withDockerfile(Paths.get("../Dockerfile")))
             .withExposedPorts(8081);
 
     @BeforeAll
@@ -62,6 +65,13 @@ class FullStackTest {
                 .format("http://%s:%d/", server.getHost(), server.getFirstMappedPort());
 
         testClient = WebTestClient.bindToServer().baseUrl(endpoint).build();
+    }
+
+    @Test
+    void canImportFromFullStackModule() {
+        Date date = new Date();
+        assertEquals(new Car(1L, "BMW", date),
+                new Car(1L, "BMW", date));
     }
 
     @Test

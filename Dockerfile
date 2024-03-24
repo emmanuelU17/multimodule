@@ -17,10 +17,10 @@ FROM maven:3.9.6-amazoncorretto-21-al2023
 WORKDIR /app
 
 # copy jar file into app directory
-COPY --from=builder /build/webserver/target/webserver-exec.jar /app
+COPY --from=builder /build/fullstack/target/fullstack-exec.jar /app
 
 # expose port 8080
 EXPOSE 8080
 
 # use entry point instead of command as it cannot be override
-ENTRYPOINT ["java", "-jar", "/app/webserver-exec.jar"]
+ENTRYPOINT ["java", "-jar", "/app/fullstack-exec.jar"]

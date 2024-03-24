@@ -13,14 +13,14 @@ import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class IntegrationTest {
+class WebServerModuleTest {
 
     private static WebTestClient testClient;
 
     @Container
     private static final GenericContainer<?> container = new GenericContainer<>(
-            new ImageFromDockerfile("normal-image", false)
-            .withDockerfile(Paths.get("../Dockerfile")))
+            new ImageFromDockerfile("webserver-module", false)
+                    .withDockerfile(Paths.get("../Dockerfile.native")))
             .withExposedPorts(8080);
 
     @BeforeAll
@@ -33,7 +33,12 @@ class IntegrationTest {
     }
 
     @Test
-    void healthy() {
+    void canImportFromWebserverModule() {
+        assertEquals(new Sample("frank"), new Sample("frank"));
+    }
+
+    @Test
+    void actuator() {
         testClient.get().uri("/actuator/health")
                 .exchange()
                 .expectStatus()
@@ -44,7 +49,7 @@ class IntegrationTest {
     }
 
     @Test
-    void payload() {
+    void nativeImage() {
         testClient.get().uri("/api/v1")
                 .exchange()
                 .expectStatus().isOk()
@@ -52,11 +57,6 @@ class IntegrationTest {
                 .expectBody()
                 .jsonPath("$.name")
                 .isEqualTo("Hello world!");
-    }
-
-    @Test
-    void sampleTestAgainstWebServerObject() {
-        assertEquals(new Sample("frank"), new Sample("frank"));
     }
 
 }
