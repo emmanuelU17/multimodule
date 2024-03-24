@@ -8,8 +8,8 @@ on:
       - master
 
 jobs:
-  build-normal-image:
-    name: Run endpoint tests against normal Docker image
+  fullstack-module:
+    name: Run endpoint tests against fullstack module
     runs-on: ubuntu-latest
 
     steps:
@@ -23,14 +23,14 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
-      - name: Run tests against normal image
+      - name: Run tests
         run: |
           mvn clean install -DskipTests
           cd integration/
           mvn test -Dtest="FullStackModuleTest"
 
-  build-native-image:
-    name: Run endpoint tests against native executable image
+  webserver-module:
+    name: Run endpoint tests against natively compiled webserver module
     runs-on: ubuntu-latest
 
     steps:
@@ -43,7 +43,8 @@ jobs:
           java-version: '21'
           distribution: 'graalvm'
 
-      - name: Run tests against natively compiled webserver module
+      - name: Run Tests
         run: |
+          mvn clean install -DskipTests
           cd integration/
           mvn test -Dtest="WebServerModuleTest"
