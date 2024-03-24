@@ -49,6 +49,9 @@ class FullStackModuleTest {
                 .withEnv("SPRING_DATASOURCE_PASSWORD", mysql.getPassword())
                 .start();
 
+        assertTrue(server.isCreated());
+        assertTrue(server.isRunning());
+
         String logs = """
                 MySQL credentials \n
                 URL: %s \n
@@ -90,7 +93,7 @@ class FullStackModuleTest {
         record Payload(String brand) {
         }
 
-        // create
+        // create route
         testClient.post().uri("/api/v1/car")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(new Payload("BMW")))
@@ -98,7 +101,7 @@ class FullStackModuleTest {
                 .expectStatus()
                 .isCreated();
 
-        // get
+        // get route
         testClient.get().uri("/api/v1/car/1")
                 .exchange()
                 .expectStatus()

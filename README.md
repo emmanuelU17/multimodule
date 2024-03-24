@@ -24,6 +24,12 @@ contains tests that run against non-natively and natively compiled production ap
    3. Testcontainers to run tests against Dockerfile builds.
    4. Automation testing leveraging GitHub actions.
 
+## Modules
+1. fullstack module: a simple RESTful server that persists data to a MySQL database
+2. integration module: runs api tests against native Docker images of fullstack and webserver
+module.
+3. webserver module: a simple RESTful server.
+
 ## Pre-requisite
 1. Docker installed
 
