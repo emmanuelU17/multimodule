@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS car
+(
+    cart_id BIGINT      NOT NULL UNIQUE AUTO_INCREMENT,
+    brand  VARCHAR(20) NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL,
+    PRIMARY KEY (cart_id)
+);

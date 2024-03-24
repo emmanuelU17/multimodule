@@ -12,7 +12,7 @@
     <groupId>dev.integration</groupId>
     <artifactId>integration</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <description>Simply runs integration tests against image generate by dev.webserver</description>
+    <description>Runs integration tests against native images of other modules</description>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -30,7 +30,23 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Test -->
+        <dependency>
+            <groupId>dev.fullstack</groupId>
+            <artifactId>fullstack</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+        </dependency>
+
+        <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>

@@ -28,6 +28,7 @@ jobs:
           mvn clean install -DskipTests
           cd integration/
           mvn test -Dtest="IntegrationTest"
+          mvn test -Dtest="FullStackTest"
 
   build-native-image:
     name: Run endpoint tests against native executable image
@@ -44,8 +45,10 @@ jobs:
           java-version: '21'
           cache: 'maven'
 
+      - name: Native compile select modules
+        run: mvn clean --projects webserver, fullstack -am native:compile -Pintegration-test -DskipTests
+
       - name: Run tests against native image
         run: |
-          mvn clean install -DskipTests
           cd integration/
           mvn test -Dtest="NativeImageTest"

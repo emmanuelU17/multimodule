@@ -45,3 +45,4 @@ contains tests that run against non-natively and natively compiled production ap
 2. Packaging Springboot application as dependencies in another module
 [Spring docs](https://docs.spring.io/spring-boot/docs/current/maven-plugin/reference/htmlsingle/#packaging.repackage-goal.parameter-details.skip)
 3. [Creating images on the fly](https://java.testcontainers.org/features/creating_images/)
+4. [building specific modules](https://books.sonatype.com/mvnref-book/reference/_using_advanced_reactor_options.html#:~:text=Making%20a%20Subset%20of%20Projects,(either%20directly%20or%20indirectly).)

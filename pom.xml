@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -17,6 +17,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>webserver</module>
+        <module>fullstack</module>
         <module>integration</module>
     </modules>
 
@@ -24,6 +25,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <module.version>1.0-SNAPSHOT</module.version>
     </properties>
 
     <build>
@@ -42,25 +44,19 @@
 
     <profiles>
         <profile>
-            <id>native</id>
+            <id>integration-test</id>
             <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.graalvm.buildtools</groupId>
-                            <artifactId>native-maven-plugin</artifactId>
-                            <executions>
-                                <execution>
-                                    <id>build-native</id>
-                                    <goals>
-                                        <goal>compile-no-fork</goal>
-                                    </goals>
-                                    <phase>package</phase>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                    </plugin>
+
+<!--                    <plugin>-->
+<!--                        <groupId>org.springframework.boot</groupId>-->
+<!--                        <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                    </plugin>-->
+                </plugins>
             </build>
         </profile>
     </profiles>
@@ -77,7 +73,6 @@
         </dependencies>
     </dependencyManagement>
 
-
     <dependencies>
         <!-- Test -->
         <dependency>
@@ -88,6 +83,16 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-testcontainers</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mysql</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
