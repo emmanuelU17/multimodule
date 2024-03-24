@@ -43,14 +43,11 @@ class FullStackModuleTest {
         assertTrue(mysql.isRunning());
 
         server
-                .withEnv("SPRING_DATASOURCE_URL", mysql.getJdbcUrl())
+                .withEnv("DB_CONNECTION_STR", mysql.getJdbcUrl())
                 .withEnv("PORT", String.valueOf(8081))
-                .withEnv("SPRING_DATASOURCE_USERNAME", mysql.getUsername())
-                .withEnv("SPRING_DATASOURCE_PASSWORD", mysql.getPassword())
+                .withEnv("DB_USERNAME", mysql.getUsername())
+                .withEnv("DB_PASSWORD", mysql.getPassword())
                 .start();
-
-        assertTrue(server.isCreated());
-        assertTrue(server.isRunning());
 
         String logs = """
                 MySQL credentials \n
@@ -63,6 +60,9 @@ class FullStackModuleTest {
                 """.formatted(mysql.getJdbcUrl(), mysql.getUsername(),
                 mysql.getPassword(), server.getLogs());
         System.out.println(logs);
+        
+        assertTrue(server.isCreated());
+	assertTrue(server.isRunning());
 
         String endpoint = String
                 .format("http://%s:%d/", server.getHost(), server.getFirstMappedPort());
