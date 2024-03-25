@@ -2,6 +2,7 @@ package dev.integration;
 
 import dev.fullstack.Car;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.testcontainers.junit.jupiter.Container;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -80,6 +82,7 @@ class FullStackModuleTest {
     }
 
     @Test
+    @Order(1)
     void actuator() {
         testClient.get().uri("/actuator/health")
                 .exchange()
@@ -91,19 +94,22 @@ class FullStackModuleTest {
     }
 
     @Test
+    @Order(2)
     void shouldSuccessfullySaveACar() {
         record Payload(String brand) {
         }
 
-        // create route
         testClient.post().uri("/api/v1/car")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(new Payload("BMW")))
                 .exchange()
                 .expectStatus()
                 .isCreated();
+    }
 
-        // get route
+    @Test
+    @Order(3)
+    void shouldSuccessfullyRetrieveACar() {
         testClient.get().uri("/api/v1/car/1")
                 .exchange()
                 .expectStatus()
@@ -112,7 +118,24 @@ class FullStackModuleTest {
                 .jsonPath("$.brand")
                 .isEqualTo("BMW")
                 .jsonPath("$.carId")
-                .isEqualTo(1);
+                .isEqualTo(1)
+                .consumeWith(result -> {
+                    String res = new String(Objects.requireNonNull(
+                            result.getResponseBodyContent()));
+
+                    String s = """
+                            Response headers: \n
+                            %s
+                                                        
+                            Response status: \n
+                            %s
+                                                        
+                            Response body: \n
+                            %s
+                            """.formatted(result.getResponseHeaders(), result.getStatus(), res);
+
+                    System.out.println(s);
+                });
     }
 
 }
