@@ -30,6 +30,10 @@ contains tests that run against non-natively and natively compiled production ap
 module.
 3. webserver module: a simple RESTful server.
 
+## Dockerfiles
+1. Builds a jar for fullstack directory.
+2. Dockerfile.fullstack and Dockerfile.webserver builds a native image for alpine linux OS.
+
 ## Pre-requisite
 1. Docker installed
 

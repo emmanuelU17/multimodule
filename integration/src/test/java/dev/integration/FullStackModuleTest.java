@@ -3,37 +3,48 @@ package dev.integration;
 import dev.fullstack.Car;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.junit.jupiter.Container;
 
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FullStackModuleTest {
 
+    private static final Logger log = LoggerFactory.getLogger(FullStackModuleTest.class);
+    static final Network network = Network.newNetwork();
     private static WebTestClient testClient;
 
     @Container
-    @ServiceConnection
     static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0")
             .withDatabaseName("fullstack_db")
             .withUsername("fullstack")
-            .withPassword("fullstack");
+            .withPassword("fullstack")
+            .withNetwork(network)
+            .withNetworkAliases("mysql");
 
     @Container
     static final GenericContainer<?> server = new GenericContainer<>(
             new ImageFromDockerfile("fullstack-module", false)
-                    .withDockerfile(Paths.get("../Dockerfile")))
-            .withExposedPorts(8081);
+                    .withDockerfile(Paths.get("../Dockerfile.fullstack")))
+            .withExposedPorts(8081)
+            .withNetwork(network)
+            .dependsOn(mysql)
+            .withLogConsumer(new Slf4jLogConsumer(log));
 
     @BeforeAll
     static void beforeAllTests() {
@@ -43,26 +54,17 @@ class FullStackModuleTest {
         assertTrue(mysql.isRunning());
 
         server
-                .withEnv("DB_CONNECTION_STR", mysql.getJdbcUrl())
-                .withEnv("PORT", String.valueOf(8081))
-                .withEnv("DB_USERNAME", mysql.getUsername())
-                .withEnv("DB_PASSWORD", mysql.getPassword())
+                .withEnv(Map.of(
+                        "DB_CONNECTION_STR", "jdbc:mysql://mysql:3306/fullstack_db",
+                        "PORT", String.valueOf(8081),
+                        "DB_USERNAME", mysql.getUsername(),
+                        "DB_PASSWORD", mysql.getPassword()
+                ))
+                .waitingFor(Wait.forHttp("/actuator/health"))
                 .start();
 
-        String logs = """
-                MySQL credentials \n
-                URL: %s \n
-                Username: %s \n
-                Password: %s \n
-                
-                Server logs \n
-                %s
-                """.formatted(mysql.getJdbcUrl(), mysql.getUsername(),
-                mysql.getPassword(), server.getLogs());
-        System.out.println(logs);
-        
         assertTrue(server.isCreated());
-	assertTrue(server.isRunning());
+        assertTrue(server.isRunning());
 
         String endpoint = String
                 .format("http://%s:%d/", server.getHost(), server.getFirstMappedPort());
@@ -108,7 +110,7 @@ class FullStackModuleTest {
                 .isOk()
                 .expectBody()
                 .jsonPath("$.brand")
-                .isEqualTo("UP")
+                .isEqualTo("BMW")
                 .jsonPath("$.carId")
                 .isEqualTo(1);
     }
