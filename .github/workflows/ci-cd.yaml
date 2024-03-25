@@ -27,7 +27,7 @@ jobs:
         run: |
           mvn clean install -DskipTests
           cd fullstack/
-          mvn run test
+          mvn test
 
       - name: Run tests
         run: |
