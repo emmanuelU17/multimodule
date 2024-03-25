@@ -40,7 +40,7 @@ class FullStackModuleTest {
     @Container
     static final GenericContainer<?> server = new GenericContainer<>(
             new ImageFromDockerfile("fullstack-module", false)
-                    .withDockerfile(Paths.get("../Dockerfile.fullstack")))
+                    .withDockerfile(Paths.get("../Dockerfile")))
             .withExposedPorts(8081)
             .withNetwork(network)
             .dependsOn(mysql)

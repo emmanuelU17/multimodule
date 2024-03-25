@@ -20,7 +20,7 @@ class WebServerModuleTest {
     @Container
     private static final GenericContainer<?> container = new GenericContainer<>(
             new ImageFromDockerfile("webserver-module", false)
-                    .withDockerfile(Paths.get("../Dockerfile.native")))
+                    .withDockerfile(Paths.get("../Dockerfile.webserver")))
             .withExposedPorts(8080);
 
     @BeforeAll
