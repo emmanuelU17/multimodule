@@ -38,7 +38,6 @@ class CarService implements ICar {
     @Transactional
     @Override
     public Optional<Car> carById(long id) {
-        record CarMapper (long cart_Id, String brand, Date created_at) {}
 
         String sql = """
         SELECT c.cart_id, c.brand, c.created_at
@@ -49,7 +48,7 @@ class CarService implements ICar {
                 .param("id", id)
                 .query(CarMapper.class)
                 .optional()
-                .map(m -> new Car(m.cart_Id, m.brand, m.created_at));
+                .map(m -> new Car(m.cartId(), m.brand(), m.createdAt()));
     }
 
     /**

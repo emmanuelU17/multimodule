@@ -11,7 +11,6 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 public class Application {
 
     static class MyRuntimeHints implements RuntimeHintsRegistrar {
-
         @Override
         public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
             // migration
@@ -19,6 +18,7 @@ public class Application {
 
             // car
             hints.serialization().registerType(Car.class);
+            hints.serialization().registerType(CarMapper.class);
         }
     }
 
